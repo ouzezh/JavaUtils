@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.ozz.demo'
+version = '0.1'
+sourceCompatibility = '1.8'
+
+task cleanJars {
+    file('$buildDir/libs/ext').delete()
+}
+task copyJars(type: Copy, dependsOn: cleanJars) {
+    from configurations.runtimeClasspath
+    into '$buildDir/libs/ext'
+}
+
+repositories {
+    mavenLocal()
+    maven { url "http://maven.aliyun.com/nexus/content/repositories/central" }
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:+'
+    implementation 'org.springframework:spring-beans:+'
+    implementation 'org.apache.poi:poi-ooxml:+'
+    implementation 'org.apache.commons:commons-lang3:+'
+    implementation 'commons-io:commons-io:+'
+    implementation 'org.apache.ant:ant:+'//ZipUtil
+    implementation 'ch.qos.logback:logback-classic:+'
+    implementation 'org.apache.commons:commons-csv:+'
+    implementation 'org.apache.httpcomponents:httpmime:+'
+    implementation 'org.jasypt:jasypt:+'
+    implementation 'com.github.penggle:kaptcha:+'
+    implementation 'org.apache.commons:commons-text:+'
+    implementation 'com.google.zxing:javase:+'
+    implementation 'redis.clients:jedis:+'
+    implementation 'org.mongodb:mongodb-driver:+'
+    implementation 'org.bouncycastle:bcprov-jdk16:+'//aes支持PKCS7Padding
+    implementation 'com.hubspot.jinjava:jinjava:+'// Jinja template engine
+    implementation 'org.apache.commons:commons-pool2:+'
+    implementation 'com.alibaba:fastjson:+'
+
+    compileOnly 'org.projectlombok:lombok:+'
+    annotationProcessor 'org.projectlombok:lombok:+'
+}
+
+test {
+    useJUnitPlatform()
+}
