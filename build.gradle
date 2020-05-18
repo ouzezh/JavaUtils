@@ -16,7 +16,8 @@ task copyJars(type: Copy, dependsOn: cleanJars) {
 
 repositories {
     mavenLocal()
-    maven { url "http://maven.aliyun.com/nexus/content/repositories/central" }
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+//    maven { url "http://maven.aliyun.com/nexus/content/repositories/central" }
     mavenCentral()
     jcenter()
 }
