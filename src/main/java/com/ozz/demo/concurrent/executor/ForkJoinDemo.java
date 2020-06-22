@@ -39,12 +39,20 @@ public class ForkJoinDemo {
   }
 
   public static void main(String[] args) throws ExecutionException, InterruptedException {
-    ForkJoinPool pool = new ForkJoinPool(3);
+    System.out.println("CommonPoolParallelism = "+ForkJoinPool.getCommonPoolParallelism());
+
+    ForkJoinPool pool = new ForkJoinPool(ForkJoinPool.getCommonPoolParallelism());
+//    ForkJoinPool pool = ForkJoinPool.commonPool();
     Runtime.getRuntime().addShutdownHook(new Thread(() -> pool.shutdown()));
 
+    // 同步获取结果
+    Integer result1 = pool.invoke(new MyForkJoinTask(1, 10));
+    System.out.println("result = " + result1);
+
+    // 异步获取结果
     ForkJoinTask<Integer> taskFuture = pool.submit(new MyForkJoinTask(1, 100));
-    Integer result = taskFuture.get();
-    System.out.println("result = " + result);
+    Integer result2 = taskFuture.get();
+    System.out.println("result = " + result2);
 
     pool.shutdown();
   }
