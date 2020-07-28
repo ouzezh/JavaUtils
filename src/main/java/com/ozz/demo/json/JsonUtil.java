@@ -22,11 +22,19 @@ public class JsonUtil {
   }
 
   public static String toJson(Object object) {
-//    return JSON.toJSONString(object, SerializerFeature.WriteMapNullValue);
+//    //是否输出值为null的字段,默认为false
+//    JSON.toJSONString(object, SerializerFeature.WriteMapNullValue);
+//
+//    //下划线转驼峰
+//    SerializeConfig config = new SerializeConfig();
+//    config.propertyNamingStrategy = PropertyNamingStrategy.SnakeCase;
+//    return JSON.toJSONString(object, config);
+
     return JSON.toJSONString(object);
   }
 
   public static <T> T fromJson(String text, Class<T> clazz) {
+//    ParserConfig.getGlobalInstance().propertyNamingStrategy = PropertyNamingStrategy.SnakeCase;//下划线转驼峰
     return JSON.parseObject(text, clazz);
   }
 
