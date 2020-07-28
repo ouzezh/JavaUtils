@@ -1,10 +1,16 @@
 package com.ozz.demo.json;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.PropertyNamingStrategy;
 import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.ozz.demo.json.model.Item;
 import com.ozz.demo.json.model.Page;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JsonUtil {
 
@@ -22,19 +28,11 @@ public class JsonUtil {
   }
 
   public static String toJson(Object object) {
-//    //是否输出值为null的字段,默认为false
-//    JSON.toJSONString(object, SerializerFeature.WriteMapNullValue);
-//
-//    //下划线转驼峰
-//    SerializeConfig config = new SerializeConfig();
-//    config.propertyNamingStrategy = PropertyNamingStrategy.SnakeCase;
-//    return JSON.toJSONString(object, config);
-
+//    JSON.toJSONString(object, SerializerFeature.WriteMapNullValue);//是否输出值为null的字段,默认为false
     return JSON.toJSONString(object);
   }
 
   public static <T> T fromJson(String text, Class<T> clazz) {
-//    ParserConfig.getGlobalInstance().propertyNamingStrategy = PropertyNamingStrategy.SnakeCase;//下划线转驼峰
     return JSON.parseObject(text, clazz);
   }
 
