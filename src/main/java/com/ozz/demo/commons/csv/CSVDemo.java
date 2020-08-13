@@ -56,30 +56,27 @@ public class CSVDemo {
       Files.deleteIfExists(path);
       Files.createFile(path);
 
-      try (BufferedWriter out = Files.newBufferedWriter(path, Charset.forName("UTF-8"));) {
+      // 显式地配置CSV文件的Header
+      String[] header = {"Id", "Name"};
+      CSVFormat format = CSVFormat.EXCEL.withHeader(header);
+      try (BufferedWriter out = Files.newBufferedWriter(path, Charset.forName("UTF-8"));CSVPrinter printer = new CSVPrinter(out, format)) {
         // 处理乱码问题
         String bomStr = new String(new byte[] {(byte) 0xef, (byte) 0xbb, (byte) 0xbf}, "UTF-8");
         out.write(bomStr);
 
-        // 显式地配置CSV文件的Header
-        String[] header = {"Id", "Name"};
-        CSVFormat format = CSVFormat.EXCEL.withHeader(header);
-
-        // 输出
+        // 输出数据
         String[][] students = new String[][] {{"001", "谭振宇"}, {"002", "周杰伦"}};
-        try (CSVPrinter printer = new CSVPrinter(out, format)) {
-          // 第一行
-          String[] student = students[0];
-          printer.print(student[0]);
-          printer.print(student[1]);
-          printer.println();
-          student = students[1];
-          // 第二行
-          List<String> records = new ArrayList<>();
-          records.add(student[0]);
-          records.add(student[1]);
-          printer.printRecord(records);
-        }
+        // 第一行
+        String[] student = students[0];
+        printer.print(student[0]);
+        printer.print(student[1]);
+        printer.println();
+        student = students[1];
+        // 第二行
+        List<String> records = new ArrayList<>();
+        records.add(student[0]);
+        records.add(student[1]);
+        printer.printRecord(records);
       }
     }  catch (RuntimeException e) {
       throw e;
