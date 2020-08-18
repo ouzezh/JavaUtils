@@ -14,6 +14,34 @@ task copyJars(type: Copy, dependsOn: cleanJars) {
     into '$buildDir/libs/ext'
 }
 
+repositories {
+    mavenLocal()
+    maven { url 'https://maven.aliyun.com/repository/central' }
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    maven { url 'https://maven.aliyun.com/repository/google' }
+    maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+    maven { url 'https://maven.aliyun.com/repository/spring' }
+    maven { url 'https://maven.aliyun.com/repository/spring-plugin' }
+    maven { url 'https://maven.aliyun.com/repository/grails-core' }
+    maven { url 'https://maven.aliyun.com/repository/apache-snapshots' }
+    jcenter()
+    mavenCentral()
+}
+
+repositories {
+    mavenLocal()
+    maven { url 'https://maven.aliyun.com/repository/central' }
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    maven { url 'https://maven.aliyun.com/repository/google' }
+    maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+    maven { url 'https://maven.aliyun.com/repository/spring' }
+    maven { url 'https://maven.aliyun.com/repository/spring-plugin' }
+    maven { url 'https://maven.aliyun.com/repository/grails-core' }
+    maven { url 'https://maven.aliyun.com/repository/apache-snapshots' }
+    jcenter()
+    mavenCentral()
+}
+
 dependencies {
     implementation 'com.google.guava:guava:29.0-jre'
     implementation 'org.springframework:spring-beans:5.2.8.RELEASE'
