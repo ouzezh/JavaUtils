@@ -14,14 +14,6 @@ task copyJars(type: Copy, dependsOn: cleanJars) {
     into '$buildDir/libs/ext'
 }
 
-repositories {
-    mavenLocal()
-    maven { url "http://nexus.staff.xdf.cn/repository/public" }
-    maven { url "https://maven.aliyun.com/repository/public" }
-    mavenCentral()
-    jcenter()
-}
-
 dependencies {
     implementation 'com.google.guava:guava:29.0-jre'
     implementation 'org.springframework:spring-beans:5.2.8.RELEASE'
