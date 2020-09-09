@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
+import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisSentinelPool;
 
@@ -49,7 +50,7 @@ public class RedisSentinelUtil {
 
   public static void main(String[] args) {
     System.out.println("-start-");
-    System.out.println(RedisSentinelUtil.keys("*"));
+    System.out.println(RedisSentinelUtil.getCurrentHostMaster());
     System.out.println("-end-");
   }
 
@@ -111,6 +112,10 @@ public class RedisSentinelUtil {
     try (Jedis jedis = pool.getResource();) {
       return jedis.keys(pattern);
     }
+  }
+
+  public static HostAndPort getCurrentHostMaster() {
+    return pool.getCurrentHostMaster();
   }
 
   public static String hget(String key, String field) {
