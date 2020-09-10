@@ -18,14 +18,14 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.UpdateOptions;
-import com.ozz.demo.cache.redis.sentinel.RedisSentinelUtil;
+import com.ozz.demo.cache.redis.sentinel.RedisSentinelTemplate;
 
 public class MongoDemo {
   private static MongoClient mongoClient;
 
   static {
     Properties props = new Properties();
-    try (InputStream in = RedisSentinelUtil.class.getResourceAsStream(
+    try (InputStream in = RedisSentinelTemplate.class.getResourceAsStream(
         "com/ozz/demo/cache/redis/sentinel/redis-sentinel.properties");) {
       props.load(in);
     } catch (RuntimeException e) {
