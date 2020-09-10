@@ -15,27 +15,27 @@ import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
 
 @Setter
-public class RedisClusterTemplate implements InitializingBean, DisposableBean {
+public class JedisClusterTemplate implements InitializingBean, DisposableBean {
 
   private JedisCluster jedisCluster;
   @Value("${redis.nodes}")
   private String nodes;
   @Value("${redis.timeOut}")
-  private Integer timeOut;
+  private Integer timeOut;// 连接超时(ms)
   @Value("${redis.maxAttempts}")
   private Integer maxAttempts;
 
   public static void main(String[] args) throws Exception {
     System.out.println("-start-");
-    RedisClusterTemplate rst = new RedisClusterTemplate();
-    rst.setNodes("localhost:6379,localhost2:6379");
-    rst.setTimeOut(30000);
-    rst.setMaxAttempts(3);
-    rst.afterPropertiesSet();
+    JedisClusterTemplate jst = new JedisClusterTemplate();
+    jst.setNodes("localhost:6379,localhost2:6379");
+    jst.setTimeOut(30000);
+    jst.setMaxAttempts(3);
+    jst.afterPropertiesSet();
 
-    System.out.println(rst.keys("*"));
+    System.out.println(jst.keys("*"));
 
-    rst.destroy();
+    jst.destroy();
     System.out.println("-end-");
   }
 
@@ -52,8 +52,7 @@ public class RedisClusterTemplate implements InitializingBean, DisposableBean {
         .stream(this.nodes.replaceAll("\\s", "").split(","))
         .map(node -> new HostAndPort(node.split(":")[0], Integer.valueOf(node.split(":")[1])))
         .collect(Collectors.toSet());
-    jedisCluster = new JedisCluster(nodeSet, Integer.valueOf(this.timeOut),
-        Integer.valueOf(this.maxAttempts));
+    jedisCluster = new JedisCluster(nodeSet, this.timeOut, this.maxAttempts);
   }
 
   public boolean exists(String key) {

@@ -13,7 +13,7 @@ import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisSentinelPool;
 
 @Setter
-public class RedisSentinelTemplate implements InitializingBean, DisposableBean {
+public class JedisSentinelTemplate implements InitializingBean, DisposableBean {
 
   private JedisSentinelPool pool;
   @Value("${redis.nodes}")
@@ -27,16 +27,16 @@ public class RedisSentinelTemplate implements InitializingBean, DisposableBean {
 
   public static void main(String[] args) throws Exception {
     System.out.println("-start-");
-    RedisSentinelTemplate rst = new RedisSentinelTemplate();
-    rst.setNodes("localhost:26379,localhost2:26379");
-    rst.setMaster("masterName");
-    rst.setPassWord("");
-    rst.setTimeOut(30000l);
-    rst.afterPropertiesSet();
+    JedisSentinelTemplate jst = new JedisSentinelTemplate();
+    jst.setNodes("localhost:26379,localhost2:26379");
+    jst.setMaster("masterName");
+    jst.setPassWord("");
+    jst.setTimeOut(30000l);
+    jst.afterPropertiesSet();
 
-    System.out.println(rst.getCurrentHostMaster());
+    System.out.println(jst.getCurrentHostMaster());
 
-    rst.destroy();
+    jst.destroy();
     System.out.println("-end-");
   }
 

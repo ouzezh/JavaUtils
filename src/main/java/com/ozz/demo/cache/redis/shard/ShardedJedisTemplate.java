@@ -13,7 +13,7 @@ import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
 
 @Setter
-public class RedisShardTemplate implements InitializingBean, DisposableBean {
+public class ShardedJedisTemplate implements InitializingBean, DisposableBean {
 
   private ShardedJedisPool jedisPool;
   @Value("${redis.nodes}")
@@ -23,14 +23,14 @@ public class RedisShardTemplate implements InitializingBean, DisposableBean {
 
   public static void main(String[] args) throws Exception {
     System.out.println("-start-");
-    RedisShardTemplate rst = new RedisShardTemplate();
-    rst.setNodes("localhost:6379,localhost2:6379");
-    rst.setTimeOut(30000);
-    rst.afterPropertiesSet();
+    ShardedJedisTemplate rjt = new ShardedJedisTemplate();
+    rjt.setNodes("localhost:6379,localhost2:6379");
+    rjt.setTimeOut(30000);
+    rjt.afterPropertiesSet();
 
-    System.out.println(rst.get("x"));
+    System.out.println(rjt.get("x"));
 
-    rst.destroy();
+    rjt.destroy();
     System.out.println("-end-");
   }
 
@@ -52,9 +52,8 @@ public class RedisShardTemplate implements InitializingBean, DisposableBean {
     poolConfig.setTestOnReturn(false);
 
     //分片信息
-    List<JedisShardInfo> shards = Arrays
-        .stream(this.nodes.replaceAll("\\s", "").split(","))
-        .map(node -> new JedisShardInfo(node.split(":")[0], Integer.valueOf(node.split(":")[1]),
+    List<JedisShardInfo> shards = Arrays.stream(this.nodes.replaceAll("\\s", "").split(",")).map(
+        node -> new JedisShardInfo(node.split(":")[0], Integer.valueOf(node.split(":")[1]),
             this.timeOut))
         .collect(Collectors.toList());
 
