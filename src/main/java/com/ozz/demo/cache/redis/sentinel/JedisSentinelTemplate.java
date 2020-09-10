@@ -36,8 +36,19 @@ public class JedisSentinelTemplate implements InitializingBean, DisposableBean {
     jst.afterPropertiesSet();
 
     System.out.println("-start-");
-    jst.printInfo();
+
     System.out.println(jst.get("x"));
+
+    // print info
+    String[] node = jst.nodes.replaceAll("\\s", "").split(",")[0].split(":");
+    try (Jedis jedis = new Jedis(node[0], Integer.valueOf(node[1]))) {
+      List<Map<String, String>> list = jedis.sentinelSlaves(jst.master);
+      System.out.println(String.format("master info: %s, %s", jst.master, jst.pool.getCurrentHostMaster()));
+      for (int i = 0; i < list.size(); i++) {
+        System.out.println(String.format("\tslave %s: %s", i + 1, list.get(i).get("name")));
+      }
+    }
+
     System.out.println("-end-");
 
     jst.destroy();
@@ -61,17 +72,6 @@ public class JedisSentinelTemplate implements InitializingBean, DisposableBean {
 
     pool = new JedisSentinelPool(this.master, nodeSet, poolConfig,
         Strings.emptyToNull(this.passWord));
-  }
-
-  public void printInfo() {
-    String[] node = this.nodes.replaceAll("\\s", "").split(",")[0].split(":");
-    try (Jedis jedis = new Jedis(node[0], Integer.valueOf(node[1]))) {
-      List<Map<String, String>> list = jedis.sentinelSlaves(this.master);
-      System.out.println(String.format("master info: %s, %s", this.master, pool.getCurrentHostMaster()));
-      for (int i = 0; i < list.size(); i++) {
-        System.out.println(String.format("\tslave %s: %s", i + 1, list.get(i).get("name")));
-      }
-    }
   }
 
   public String get(String key) {
