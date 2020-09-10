@@ -26,17 +26,17 @@ public class JedisClusterTemplate implements InitializingBean, DisposableBean {
   private Integer maxAttempts;
 
   public static void main(String[] args) throws Exception {
-    System.out.println("-start-");
     JedisClusterTemplate jst = new JedisClusterTemplate();
     jst.setNodes("localhost:6379,localhost2:6379");
-    jst.setTimeOut(30000);
+    jst.setTimeOut(2000);
     jst.setMaxAttempts(3);
     jst.afterPropertiesSet();
 
+    System.out.println("-start-");
     System.out.println(jst.keys("*"));
+    System.out.println("-end-");
 
     jst.destroy();
-    System.out.println("-end-");
   }
 
   @Override

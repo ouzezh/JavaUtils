@@ -22,16 +22,16 @@ public class ShardedJedisTemplate implements InitializingBean, DisposableBean {
   private Integer timeOut;
 
   public static void main(String[] args) throws Exception {
-    System.out.println("-start-");
     ShardedJedisTemplate rjt = new ShardedJedisTemplate();
     rjt.setNodes("localhost:6379,localhost2:6379");
-    rjt.setTimeOut(30000);
+    rjt.setTimeOut(3000);
     rjt.afterPropertiesSet();
 
+    System.out.println("-start-");
     System.out.println(rjt.get("x"));
+    System.out.println("-end-");
 
     rjt.destroy();
-    System.out.println("-end-");
   }
 
   @Override
@@ -46,8 +46,8 @@ public class ShardedJedisTemplate implements InitializingBean, DisposableBean {
     //连接池配置
     JedisPoolConfig poolConfig = new JedisPoolConfig();
     poolConfig.setMaxTotal(10);
-    poolConfig.setMaxIdle(1);
-    poolConfig.setMaxWaitMillis(200);
+    poolConfig.setMaxIdle(poolConfig.getMaxTotal());
+    poolConfig.setMaxWaitMillis(2000);
     poolConfig.setTestOnBorrow(false);
     poolConfig.setTestOnReturn(false);
 
