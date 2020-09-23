@@ -1,11 +1,13 @@
 package com.ozz.demo.json.model;
 
 import java.util.List;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@EqualsAndHashCode(callSuper = false)
-@Data
+@Getter
+@Setter
+@ToString
 public class Page<T> implements BaseObject {
 
   private List<T> rows;
