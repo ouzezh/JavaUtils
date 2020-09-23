@@ -1,16 +1,10 @@
 package com.ozz.demo.json;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.PropertyNamingStrategy;
 import com.alibaba.fastjson.TypeReference;
-import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.ozz.demo.json.model.Item;
 import com.ozz.demo.json.model.Page;
-
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class JsonUtil {
 
