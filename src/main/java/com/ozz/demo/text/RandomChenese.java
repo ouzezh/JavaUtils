@@ -7,7 +7,7 @@ public class RandomChenese {
 
   public static void main(String[] args) throws UnsupportedEncodingException {
     for (int i = 0; i < 3; i++) {
-      System.out.println(getRandomChinese(6));
+      System.out.println(getRandomChinese(3));
     }
   }
 
