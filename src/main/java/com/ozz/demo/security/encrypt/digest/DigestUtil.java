@@ -9,8 +9,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 /**
  * 数据摘要
  */
-public class DigestDemo {
-  public String digest(Path path) {
+public class DigestUtil {
+  public static String digest(Path path) {
     try (InputStream input = Files.newInputStream(path)) {
       return DigestUtils.md5Hex(input);
       // return DigestUtils.sha1Hex(input);;
@@ -21,7 +21,7 @@ public class DigestDemo {
     }
   }
 
-  public String digest(String data) {
+  public static String digest(String data) {
     return DigestUtils.md5Hex(data);
     // return DigestUtils.sha1Hex(input);;
   }

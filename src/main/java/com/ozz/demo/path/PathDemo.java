@@ -12,10 +12,10 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.ozz.demo.security.encrypt.digest.DigestDemo;
+import com.ozz.demo.security.encrypt.digest.DigestUtil;
 
 public class PathDemo {
-  private DigestDemo digestDemo;
+  private DigestUtil digestDemo;
 
   public Path getPath(String path) {
     return Paths.get(path);
