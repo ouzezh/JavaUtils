@@ -2,6 +2,7 @@ package com.ozz.demo.office.excel.reader.base;
 
 import com.ozz.demo.office.excel.ExcelUtil;
 import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.eventusermodel.ReadOnlySharedStringsTable;
 import org.apache.poi.xssf.model.StylesTable;
 
@@ -25,7 +26,7 @@ public class MyXSSFSheetXMLHandler extends XSSFSheetXMLHandler {
     if("General".equals(formatString)) {
       return value.toString();
     } else {
-      formatString = ExcelUtil.getDateFormatString(formatString);
+      formatString = ExcelUtil.getDateFormatString(formatString, DateUtil.isADateFormat(formatIndex, formatString));
       return super.parseNumber(value, formatter, formatIndex, formatString);
     }
   }

@@ -120,7 +120,7 @@ public class ExcelUtil {
       if (cell.getCellType() == CellType.NUMERIC) {// 数字类型
         if (DateUtil.isCellDateFormatted(cell)) {// 时间
           Date date = cell.getDateCellValue();
-          result = DateFormatUtils.format(date, getDateFormatString(cell.getCellStyle().getDataFormatString()));
+          result = DateFormatUtils.format(date, getDateFormatString(cell.getCellStyle().getDataFormatString(), DateUtil.isCellDateFormatted(cell)));
         } else {
           result = String.valueOf(cell.getNumericCellValue()).replaceFirst("\\.0+", "");
         }
@@ -140,14 +140,18 @@ public class ExcelUtil {
     return result;
   }
 
-  public static String getDateFormatString(String formatString) {
-    if ("m/d/yy".equals(formatString) || "m/d/yy".equals(formatString)) {
-      return "yyyy-MM-dd";
-    } else if ("m/d/yy h:mm".equals(formatString)) {
-      return "yyyy-MM-dd h:mm";
-    } else {
-      return formatString;
+  public static String getDateFormatString(String formatString, boolean isDate) {
+    if(isDate) {
+      if ("m/d/yy".equals(formatString) || "m/d/yy".equals(formatString)) {
+        return "yyyy-MM-dd";
+      } else if ("m/d/yy h:mm".equals(formatString)) {
+        return "yyyy-MM-dd HH:mm";
+      } else {
+        return formatString;
+//        return "yyyy-MM-dd HH:mm:ss";
+      }
     }
+    return formatString;
   }
 
   public static Date getCellDateValue(Row row, int colIndex) {
