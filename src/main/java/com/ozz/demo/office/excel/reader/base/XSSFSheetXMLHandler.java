@@ -1,8 +1,3 @@
-/**
- * copy from org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler
- * 
- * poi-ooxml 4.1.0
- */
 package com.ozz.demo.office.excel.reader.base;
 
 import static org.apache.poi.xssf.usermodel.XSSFRelation.NS_SPREADSHEETML;
@@ -10,14 +5,16 @@ import static org.apache.poi.xssf.usermodel.XSSFRelation.NS_SPREADSHEETML;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
-
 import org.apache.poi.ss.usermodel.BuiltinFormats;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.util.POILogFactory;
 import org.apache.poi.util.POILogger;
-import org.apache.poi.xssf.model.*;
+import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler.SheetContentsHandler;
+import org.apache.poi.xssf.model.Comments;
+import org.apache.poi.xssf.model.SharedStrings;
+import org.apache.poi.xssf.model.Styles;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFComment;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
@@ -26,9 +23,11 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * This class handles the processing of a sheet#.xml 
- *  sheet part of a XSSF .xlsx file, and generates
- *  row and cell events for it.
+ * copy from org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler
+ *
+ * poi-ooxml 4.1.2
+ *
+ * 修改：(1) 拆分出方法 parseNumber (2)删除SheetContentsHandler使用org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler.SheetContentsHandler替代
  */
 public class XSSFSheetXMLHandler extends DefaultHandler {
     private static final POILogger logger = POILogFactory.getLogger(XSSFSheetXMLHandler.class);
@@ -66,7 +65,7 @@ public class XSSFSheetXMLHandler extends DefaultHandler {
    /**
     * Where our text is going
     */
-   private final org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler.SheetContentsHandler output;
+   private final SheetContentsHandler output;
 
    // Set when V start element is seen
    private boolean vIsOpen;
@@ -107,7 +106,7 @@ public class XSSFSheetXMLHandler extends DefaultHandler {
            Styles styles,
            Comments comments,
            SharedStrings strings,
-           org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler.SheetContentsHandler sheetContentsHandler,
+           SheetContentsHandler sheetContentsHandler,
            DataFormatter dataFormatter,
            boolean formulasNotResults) {
        this.stylesTable = styles;
@@ -129,7 +128,7 @@ public class XSSFSheetXMLHandler extends DefaultHandler {
    public XSSFSheetXMLHandler(
            Styles styles,
            SharedStrings strings,
-           org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler.SheetContentsHandler sheetContentsHandler,
+           SheetContentsHandler sheetContentsHandler,
            DataFormatter dataFormatter,
            boolean formulasNotResults) {
        this(styles, null, strings, sheetContentsHandler, dataFormatter, formulasNotResults);
@@ -144,7 +143,7 @@ public class XSSFSheetXMLHandler extends DefaultHandler {
    public XSSFSheetXMLHandler(
            Styles styles,
            SharedStrings strings,
-           org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler.SheetContentsHandler sheetContentsHandler,
+           SheetContentsHandler sheetContentsHandler,
            boolean formulasNotResults) {
        this(styles, strings, sheetContentsHandler, new DataFormatter(), formulasNotResults);
    }
@@ -348,7 +347,7 @@ public class XSSFSheetXMLHandler extends DefaultHandler {
                    break;
 
                case NUMBER:
-                   thisStr = parseNmuber(value, formatter, this.formatIndex, this.formatString);
+                   thisStr = parseNumber(value, formatter, this.formatIndex, this.formatString);
                    break;
 
                default:
@@ -394,15 +393,15 @@ public class XSSFSheetXMLHandler extends DefaultHandler {
        }
    }
 
-  String parseNmuber(StringBuilder value2, DataFormatter formatter2, short formatIndex2, String formatString2) {
+  String parseNumber(StringBuilder value, DataFormatter formatter, short formatIndex, String formatString) {
     String n = value.toString();
-    if (this.formatString != null && n.length() > 0)
-      return formatter.formatRawCellContents(Double.parseDouble(n), this.formatIndex, this.formatString);
+    if (formatString != null && n.length() > 0)
+      return formatter.formatRawCellContents(Double.parseDouble(n), formatIndex, formatString);
     else
       return n;
   }
 
-  /**
+   /**
     * Captures characters only if a suitable element is open.
     * Originally was just "v"; extended for inlineStr also.
     */

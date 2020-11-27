@@ -1,7 +1,7 @@
 package com.ozz.demo.office.excel.reader;
 
-import com.ozz.demo.office.excel.reader.base.SimpleSheetContentsHandler;
-import com.ozz.demo.office.excel.reader.base.SimpleXSSFSheetXMLHandler;
+import com.ozz.demo.office.excel.reader.base.MySheetContentsHandler;
+import com.ozz.demo.office.excel.reader.base.MyXSSFSheetXMLHandler;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,27 +16,38 @@ import org.apache.poi.xssf.model.StylesTable;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
-public class ExcelReaderDemo {
+public class ExcelReaderUtil {
   public static void main(String[] args) {
-    List<Map<String, String>> data = ExcelReaderDemo.parse(Paths.get("D:/Nutstore/新东方/数据中台/科杰/权限相关表/模板.xlsx"));
+    Path path = Paths.get("C:\\Users\\ouzezhou\\Desktop\\Temp\\20201127\\test_eventusermodel.xlsx");
+    List<Map<String, String>> data = ExcelReaderUtil.parse(path, 0);
     for(Map<String, String> row : data) {
       System.out.println(row.toString());
     }
   }
 
-  public static List<Map<String, String>> parse(Path path) {
+  public static List<Map<String, String>> parse(Path path, int skipRow) {
+    try (InputStream input = Files.newInputStream(path)) {
+      return parse(input, skipRow);
+    } catch (RuntimeException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static List<Map<String, String>> parse(InputStream input, int skipRow) {
     try {
-      try (InputStream inStream = Files.newInputStream(path); OPCPackage pkg = OPCPackage.open(inStream);) {
+      try (OPCPackage pkg = OPCPackage.open(input)) {
         XSSFReader xssfReader = new XSSFReader(pkg);
         StylesTable styles = xssfReader.getStylesTable();
         ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(pkg, false);
 
         try (InputStream sheetInputStream = xssfReader.getSheetsData().next();) {
           XMLReader sheetParser = XMLHelper.newXMLReader();
-          SimpleSheetContentsHandler handler = new SimpleSheetContentsHandler();
-          sheetParser.setContentHandler(new SimpleXSSFSheetXMLHandler(styles, strings, handler, false));
+          MySheetContentsHandler contentsHandler = new MySheetContentsHandler(skipRow);
+          sheetParser.setContentHandler(new MyXSSFSheetXMLHandler(styles, strings, contentsHandler, false));
           sheetParser.parse(new InputSource(sheetInputStream));
-          return handler.getData();
+          return contentsHandler.getDataList();
         }
       }
     } catch (RuntimeException e) {
