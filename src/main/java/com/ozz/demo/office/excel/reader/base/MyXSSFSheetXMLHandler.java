@@ -21,7 +21,7 @@ public class MyXSSFSheetXMLHandler extends XSSFSheetXMLHandler {
   }
 
   @Override
-  String parseNumber(StringBuilder value, DataFormatter formatter, short formatIndex, String formatString) {
+  protected String parseNumber(StringBuilder value, DataFormatter formatter, short formatIndex, String formatString) {
     org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler a;
     if("General".equals(formatString)) {
       return value.toString();

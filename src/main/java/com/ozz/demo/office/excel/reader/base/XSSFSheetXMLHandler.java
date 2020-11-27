@@ -393,7 +393,7 @@ public class XSSFSheetXMLHandler extends DefaultHandler {
        }
    }
 
-  String parseNumber(StringBuilder value, DataFormatter formatter, short formatIndex, String formatString) {
+  protected String parseNumber(StringBuilder value, DataFormatter formatter, short formatIndex, String formatString) {
     String n = value.toString();
     if (formatString != null && n.length() > 0)
       return formatter.formatRawCellContents(Double.parseDouble(n), formatIndex, formatString);
