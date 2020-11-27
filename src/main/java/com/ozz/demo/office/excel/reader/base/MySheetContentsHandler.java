@@ -35,7 +35,9 @@ public class MySheetContentsHandler implements SheetContentsHandler {
   @Override
   public void cell(String cellReference, String formattedValue, XSSFComment comment) {
     if(row != null) {
-      row.put(cellReference.replaceFirst("\\d+$", ""), formattedValue);
+      if(formattedValue != null) {
+        row.put(cellReference.replaceFirst("\\d+$", ""), formattedValue.trim());
+      }
     }
   }
 
