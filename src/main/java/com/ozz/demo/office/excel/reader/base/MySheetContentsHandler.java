@@ -28,7 +28,7 @@ public class MySheetContentsHandler implements SheetContentsHandler {
 
   @Override
   public void endRow(int rowNum) {
-    if(row != null) {
+    if(row != null && !row.isEmpty()) {
       dataList.add(row);
     }
   }
