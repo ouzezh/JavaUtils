@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler.SheetContentsHandler;
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
@@ -35,7 +36,7 @@ public class MySheetContentsHandler implements SheetContentsHandler {
   @Override
   public void cell(String cellReference, String formattedValue, XSSFComment comment) {
     if(row != null) {
-      if(formattedValue != null) {
+      if(StringUtils.isNotBlank(formattedValue)) {
         row.put(cellReference.replaceFirst("\\d+$", ""), formattedValue.trim());
       }
     }
