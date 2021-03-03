@@ -9,12 +9,12 @@ import java.net.URL;
  */
 public class ResourcePathUtil {
 
-  public String getResourcePath() {
+  public static String getResourcePath() {
     return getResourcePath("/");
   }
 
-  public String getResourcePath(String path) {
-    URL url = getClass().getResource(path);
+  public static String getResourcePath(String path) {
+    URL url = ResourcePathUtil.class.getResource(path);
     if (url == null) {
       throw new RuntimeException("未找到路径: " + path);
     } else {
@@ -22,11 +22,11 @@ public class ResourcePathUtil {
     }
   }
 
-  public String getProjectPath() {
+  public static String getProjectPath() {
     return System.getProperty("user.dir").replaceAll("\\\\", "/");
   }
 
-  public String getWorkspacePath() {
+  public static String getWorkspacePath() {
     return getProjectPath().replaceFirst("/[^/]+$", "");
   }
 
