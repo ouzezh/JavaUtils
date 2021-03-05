@@ -38,7 +38,8 @@ repositories {
 dependencies {
     implementation 'com.google.guava:guava:29.0-jre'
     implementation 'org.springframework:spring-beans:5.2.8.RELEASE'
-    implementation 'org.apache.poi:poi-ooxml:4.1.2'
+//    implementation 'org.apache.poi:poi-ooxml:4.1.2'
+    implementation 'com.alibaba:easyexcel:2.2.7'
     implementation 'org.apache.commons:commons-lang3:3.11'
     implementation 'commons-io:commons-io:2.7'
     implementation 'org.apache.ant:ant:1.10.8'//ZipUtil

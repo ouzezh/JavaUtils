@@ -1,4 +1,4 @@
-package com.ozz.demo.office.excel.reader;
+package com.ozz.demo.excel.poi.reader;
 
 import com.ozz.demo.office.excel.reader.base.MySheetContentsHandler;
 import com.ozz.demo.office.excel.reader.base.MyXSSFSheetXMLHandler;
