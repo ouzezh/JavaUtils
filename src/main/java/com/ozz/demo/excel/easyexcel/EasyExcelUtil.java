@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ public class EasyExcelUtil {
 
         // 简单写
         try(OutputStream out = new FileOutputStream(pathName)) {
-            write(out, MyExcelModel.class, data);
+            write(out, data, MyExcelModel.class);
         }
 
         // 简单读
@@ -51,8 +52,19 @@ public class EasyExcelUtil {
         System.out.println("你好");
     }
 
-    public static <T> void write(OutputStream out, Class<T> head, List<T> list) {
+    public static <T> void write(OutputStream out, List<T> list, Class<T> head) {
         ExcelWriterBuilder builder = EasyExcel.write(out, head).autoTrim(true);
+        builder.registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+                .registerWriteHandler(new HorizontalCellStyleStrategy(getDefaultCellStyle(true), getDefaultCellStyle(false)));
+        try(ExcelWriter w = builder.build()) {
+            WriteSheet sheet = EasyExcel.writerSheet().build();
+            w.write(list, sheet);
+        }
+    }
+
+    public static <T> void write(OutputStream out, List<T> list, List<String> head) {
+        ExcelWriterBuilder builder = EasyExcel.write(out).autoTrim(true)
+                .head(head.stream().map(Collections::singletonList).collect(Collectors.toList()));
         builder.registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                 .registerWriteHandler(new HorizontalCellStyleStrategy(getDefaultCellStyle(true), getDefaultCellStyle(false)));
         try(ExcelWriter w = builder.build()) {
