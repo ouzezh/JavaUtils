@@ -9,6 +9,5 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Page<T> implements BaseObject {
-
   private List<T> rows;
 }

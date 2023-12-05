@@ -7,10 +7,13 @@ import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 @Getter
 @Setter
 @ToString
+// chain:set返回当前对象, prefix:get/set忽略属性前缀, fluent: get/set使用基础属性名且set返回当前对象
+@Accessors(chain = true)
 public class Item implements BaseObject {
 
   private String id;

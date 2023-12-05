@@ -1,59 +1,33 @@
 package com.ozz.demo.regex;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ReUtil;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * 
- * 
- * @author ozz
- */
 public class RegexUtil {
+    public static void main(String[] args) {
+        String content = "ZZZaaabbbccc中文1234";
 
-  private String REGEX_YMD = "((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])" + "|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?"
-                                    + "((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?"
-                                    + "((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?"
-                                    + "((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))";
+        //抽取多个分组然后把它们拼接起来
+        String resultExtractMulti = ReUtil.extractMulti("(\\w)aa(\\w)", content, "$1-$2");
+        Assert.isTrue("Z-a".equals(resultExtractMulti));
 
-  private final Pattern PATTERN_DATA_YMD = Pattern.compile("^" + REGEX_YMD + "$");
-  private final Pattern PATTERN_DATA_FULL = Pattern.compile("^(" + REGEX_YMD + ") (2[0-3]|[0-1]\\d):[0-5]\\d:[0-5]\\d$");
-  private final Pattern PATTERN_VARIABLE = Pattern.compile("^[A-Za-z][A-Za-z_0-9]*$");
+        //删除第一个匹配到的内容
+        String resultDelFirst = ReUtil.delFirst("(\\w)aa(\\w)", content);
+        Assert.isTrue("ZZbbbccc中文1234".equals(resultDelFirst));
 
-  public void replaceWithCapturingGroup() {
-    System.out.println("a<b>c".replaceFirst("<(.*)>", "$1"));
-  }
+        //查找所有匹配文本
+        List<String> resultFindAll = ReUtil.findAll("\\w{2}", content, 0, new ArrayList<String>());
 
-  public boolean isValidDateYMD(String date) {
-    return regexFind(PATTERN_DATA_YMD, date);
-  }
+        //给定字符串是否匹配给定正则
+        boolean isMatch = ReUtil.isMatch("\\w+[\u4E00-\u9FFF]+\\d+", content);
+        Assert.isTrue(isMatch);
 
-  public boolean isValidDateFull(String date) {
-    return regexFind(PATTERN_DATA_FULL, date);
-  }
-
-  public boolean isValidVariable(String name) {
-    return regexFind(PATTERN_VARIABLE, name);
-  }
-
-  private boolean regexFind(Pattern pattern, String str) {
-    if (StringUtils.isNotEmpty(str)) {
-      Matcher m = pattern.matcher(str);
-      if (m.find()) {
-        return true;
-      }
+        // 通过正则查找到字符串，然后把匹配到的字符串加入到replacementTemplate中，$1表示分组1的字符串
+        //此处把1234替换为 ->1234<-
+        String replaceAll = ReUtil.replaceAll(content, "(\\d+)", "->$1<-");
+        Assert.isTrue("ZZZaaabbbccc中文->1234<-".equals(replaceAll));
     }
-    return false;
-  }
-
-  public Matcher regexFind(String regex, String str) {
-    if (StringUtils.isEmpty(str)) {
-      str = "";
-    }
-    Pattern pattern = Pattern.compile(regex);
-    Matcher m = pattern.matcher(str);
-    return m;
-  }
-
 }

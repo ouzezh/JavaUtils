@@ -1,0 +1,35 @@
+package com.ozz.demo;
+
+import org.openjdk.jmh.annotations.*;
+
+/**
+ * JMH-Java Microbenchmark Harness(Java微基准测试)
+ *
+ * 1.安装插件 JMH plugin
+ * 2.右键直接运行
+ * 3.如报错：Unable to create the JMH lock (C:\WINDOWS\/jmh.lock), exiting.
+ *   则配置 RunConfiguration -> Environment Variables -> include system environment viables
+ */
+public class MyJmhTest {
+    /*
+Throughput: 整体吞吐量，例如“1秒内可以执行多少次调用”。
+AverageTime: 调用的平均时间，例如“每次调用平均耗时xxx毫秒”。
+SampleTime: 随机取样，最后输出取样结果的分布，例如“99%的调用在xxx毫秒以内，99.99%的调用在xxx毫秒以内”
+SingleShotTime: 以上模式都是默认一次 iteration 是 1s，唯有 SingleShotTime 是只运行一次。往往同时把 warmup 次数设为0，用于测试冷启动时的性能。
+All(“all”, “All benchmark modes”);
+     */
+
+    @Benchmark// 启用基准测试
+    @Warmup(iterations = 1, time = 3)// 预热 调用1次 每次3秒    由于JVM中对于特定代码会存在优化(本地化,字节码->机器码),预热对于测试结果很重要
+    @Threads(1)// 每个进程中的测试线程（测试并发数）    Threads.MAX代表使用Runtime.getRuntime().availableProcessors()
+    @Fork(2)// 测试进程数（测试轮数）  每个进程都是先预热再正式计量
+    @BenchmarkMode(Mode.Throughput)// 指标：吞吐量
+    @Measurement(iterations = 1, time = 2)// 调用方法次数 每次1轮 每轮2秒
+    public void testJmh() throws InterruptedException {
+        test();
+    }
+
+    private void test() throws InterruptedException {
+        Thread.sleep(100);
+    }
+}

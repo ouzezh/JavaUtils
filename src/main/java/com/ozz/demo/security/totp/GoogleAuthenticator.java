@@ -1,16 +1,16 @@
 package com.ozz.demo.security.totp;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.security.SecureRandom;
-
-import javax.swing.filechooser.FileSystemView;
-
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.extra.qrcode.QrCodeUtil;
+import cn.hutool.log.StaticLog;
+import com.ozz.demo.path.ResourcePathUtil;
+import com.ozz.demo.security.totp.base.TOTP;
+import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.codec.binary.Hex;
 
-import com.ozz.demo.security.totp.base.TOTP;
-import com.ozz.demo.zxing.QRCodeDemo;
+import java.net.URLEncoder;
+import java.security.SecureRandom;
 
 /**
  * http://www.asaph.org/2016/04/google-authenticator-2fa-java.html
@@ -21,17 +21,17 @@ public class GoogleAuthenticator {
     String issuer = "google-test";
     String account = "ouzezh";
 
-    System.out.println("secretKey: " + secretKey);
+    StaticLog.info("secretKey: " + secretKey);
 
     String code = getTOTPCode(secretKey, System.currentTimeMillis());
-    System.out.println("TOTP code: " + code);
+    StaticLog.info("TOTP code: " + code);
 
-    String barCodeData = getGoogleAuthenticatorBarCode(secretKey, issuer, account);
-    System.out.println("barCodeData: " + barCodeData);
+    String barCodeData = getGoogleAuthenticatorQRCode(secretKey, issuer, account);
+    StaticLog.info("barCodeData: " + barCodeData);
 
-    String filePath = FileSystemView.getFileSystemView().getHomeDirectory().getPath() + "/QRCode.png";
-    QRCodeDemo.createQRCode(barCodeData, filePath, 200, 200);
-    System.out.println("save QRCode to " + filePath);
+    String filePath = ResourcePathUtil.getHomeDirectory() + "/QRCode.png";
+    QrCodeUtil.generate(barCodeData, 200, 200, FileUtil.file(filePath));
+    StaticLog.info("save QRCode to " + filePath);
   }
 
   public static String getRandomSecretKey() {
@@ -55,16 +55,13 @@ public class GoogleAuthenticator {
     return TOTP.generateTOTP(hexKey, hexTime, "6");// TOTP: Time-Based One-Time Password Algorithm
   }
 
-  public static String getGoogleAuthenticatorBarCode(String secretKey, String issuer, String account) {
+  @SneakyThrows
+  public static String getGoogleAuthenticatorQRCode(String secretKey, String issuer, String account) {
     String normalizedBase32Key = secretKey.replace(" ", "").toUpperCase();
-    try {
       return "otpauth://totp/"
              + URLEncoder.encode(issuer + ":" + account, "UTF-8").replace("+", "%20")
              + "?secret=" + URLEncoder.encode(normalizedBase32Key, "UTF-8").replace("+", "%20")
              + "&issuer=" + URLEncoder.encode(issuer, "UTF-8").replace("+", "%20");
-    } catch (UnsupportedEncodingException e) {
-      throw new IllegalStateException(e);
-    }
   }
 
 }

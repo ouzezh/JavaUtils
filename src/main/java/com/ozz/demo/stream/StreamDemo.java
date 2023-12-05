@@ -1,5 +1,8 @@
 package com.ozz.demo.stream;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.log.StaticLog;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,9 +18,9 @@ public class StreamDemo {
     boolean bb = strs.stream().allMatch(str -> str.equals("a"));
     boolean cc = strs.stream().noneMatch(str -> str.equals("a"));
     long count = strs.stream().filter(str -> str.equals("a")).count();
-    System.out.println(aa);// TRUE
-    System.out.println(bb);// FALSE
-    System.out.println(cc);// FALSE
-    System.out.println(count);// 3
+    StaticLog.info(StrUtil.toString(aa));// TRUE
+    StaticLog.info(StrUtil.toString(bb));// FALSE
+    StaticLog.info(StrUtil.toString(cc));// FALSE
+    StaticLog.info(StrUtil.toString(count));// 3
   }
 }

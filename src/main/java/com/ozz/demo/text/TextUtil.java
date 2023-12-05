@@ -1,6 +1,6 @@
 package com.ozz.demo.text;
 
-import org.apache.commons.lang3.StringUtils;
+import cn.hutool.core.util.StrUtil;
 
 public class TextUtil {
   /**
@@ -9,8 +9,8 @@ public class TextUtil {
    * @param input String.
    * @return 全角字符串.
    */
-  public String toHalfwidth(String input) {
-    if (StringUtils.isEmpty(input))
+  public String toHalfWidth(String input) {
+    if (StrUtil.isEmpty(input))
       return input;
 
     char c[] = input.toCharArray();
@@ -30,8 +30,8 @@ public class TextUtil {
    * @param input String.
    * @return 半角字符串
    */
-  public String toFullwidth(String input) {
-    if (StringUtils.isEmpty(input))
+  public String toFullWidth(String input) {
+    if (StrUtil.isEmpty(input))
       return input;
 
     char c[] = input.toCharArray();

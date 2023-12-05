@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.log.StaticLog;
 import org.springframework.util.Assert;
 
 /**
@@ -50,7 +53,7 @@ public class ArithmeticUtil {
   public static void main(String[] args) {
     String expression = "-2.5+(-1+3)*3-1/2+(1/3+1)*3";
     double res = execute(expression);
-    System.out.println(res);
+    StaticLog.info(StrUtil.toString(res));
     Assert.state(res == 7, "result error");
   }
 
@@ -193,11 +196,7 @@ public class ArithmeticUtil {
         result = num1.multiply(num2);
         break;
       case "/":
-        try {
-          result = num1.divide(num2, scale, RoundingMode.HALF_UP);
-        } catch (RuntimeException e) {
-          throw e;
-        }
+        result = num1.divide(num2, scale, RoundingMode.HALF_UP);
         break;
       default:
         throw new ArithmeticException(String.format("operator %s not support", operator));
