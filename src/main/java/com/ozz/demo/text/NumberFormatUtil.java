@@ -1,9 +1,13 @@
 package com.ozz.demo.text;
 
+import cn.hutool.core.lang.Assert;
 import cn.hutool.log.StaticLog;
 
 import java.text.DecimalFormat;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * 英文与数字转化
@@ -14,22 +18,20 @@ public class NumberFormatUtil {
     private static final Pattern PATTERN = Pattern.compile("[A-Za-z]+");
 
     public static String formatEnglish(int num) {
-        if (num <= 0)
-            throw new RuntimeException("数字不能小于等于0");
-        String enNum = "";
-        int mod;
+        Assert.isTrue(num >= 0, "数字必须大于0");
+        StringBuilder sb = new StringBuilder();
+
+        List<Integer> list = new LinkedList<>();
         while (num > 0) {
-            mod = num % 26;
-            if (mod == 0) {
-                // 正好进位时将上一位上取1，变成下一位的Z
-                enNum = 'Z' + enNum;
-                num = num / 26 - 1;
-            } else {
-                enNum = (char) ('A' + mod - 1) + enNum;
-                num = num / 26;
+            int mod = num % 26;
+            num = num / 26;
+            if(num>0 && mod==0) {// Z特殊处理
+                num--;
+                mod = 26;
             }
+            list.add(0, mod);
         }
-        return enNum;
+        return list.stream().map(t -> String.valueOf((char) ('A'+t-1))).collect(Collectors.joining());
     }
 
     public static int parseEnglish(String en) {
