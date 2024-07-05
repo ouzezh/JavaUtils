@@ -3,6 +3,9 @@ package com.ozz.demo.security.encrypt.symmetric;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.crypto.Mode;
+import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.AES;
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
@@ -19,6 +22,7 @@ public class SymmetricCryptoDemo {
 
         // 随机生成密钥
         String key = Base64.encode(SecureUtil.generateKey(SymmetricAlgorithm.AES.getValue()).getEncoded());
+        StaticLog.info("秘钥: " + key);
 
         // 构建
         AES aes = SecureUtil.aes(Base64.decode(key));
@@ -30,12 +34,25 @@ public class SymmetricCryptoDemo {
         byte[] decrypt = aes.decrypt(encrypt);
 
         // 加密为Base64表示
-        String encryptHex = aes.encryptBase64(content);
+        String encryptHex = aes.encryptHex(content);
         // 解密为字符串
         String decryptStr = aes.decryptStr(encryptHex, CharsetUtil.CHARSET_UTF_8);
-
-        StaticLog.info(encryptHex);
-        StaticLog.info(decryptStr);
+        // 打印
+        StaticLog.info("密文: " + encryptHex);
+        StaticLog.info("明文: " + decryptStr);
         Assert.isTrue(content.equals(decryptStr));
+
+        // 加盐加密
+        String salt = Base64.encode(RandomUtil.randomBytes(16));
+        StaticLog.info("秘钥: " + salt);
+        StaticLog.info("盐: " + salt);
+        AES aes2 = new AES(Mode.CBC, Padding.PKCS5Padding, Base64.decode(key), Base64.decode(salt));
+        String encryptHex2 = aes2.encryptHex(content);
+        // 解密为字符串
+        String decryptStr2 = aes2.decryptStr(encryptHex2);
+        // 打印
+        StaticLog.info("加盐密文: " + encryptHex2);
+        StaticLog.info("加盐明文: " + decryptStr2);
+        Assert.isTrue(content.equals(decryptStr2));
     }
 }
