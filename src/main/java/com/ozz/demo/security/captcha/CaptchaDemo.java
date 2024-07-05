@@ -5,7 +5,7 @@ import cn.hutool.captcha.CircleCaptcha;
 import com.ozz.demo.path.ResourcePathUtil;
 
 /**
- *
+ * 图形验证码
  */
 public class CaptchaDemo {
     public static void main(String[] args) {

@@ -9,6 +9,8 @@ import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.log.StaticLog;
 
 /**
+ * 对称加密
+ *
  * https://www.hutool.cn/docs/#/crypto/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86-SymmetricCrypto
  */
 public class SymmetricCryptoDemo {
