@@ -41,7 +41,8 @@ public class DateUtils {
   }
 
   public static String toString(long millis) {
-      return Duration.ofMillis(millis).toString();
+//      return Duration.ofMillis(millis).toString();
+      return DateUtil.formatBetween(millis);
   }
 
   public static String getExpectedTime(long startTime, int currentNum, int totalNum) {
