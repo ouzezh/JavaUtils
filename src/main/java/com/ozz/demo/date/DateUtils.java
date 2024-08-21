@@ -40,7 +40,7 @@ public class DateUtils {
       return LocalDateTimeUtil.between(d1, d2);
   }
 
-  public static String toString(long millis) {
+  public static String formatBetween(long millis) {
 //      return Duration.ofMillis(millis).toString();
       return DateUtil.formatBetween(millis);
   }
@@ -50,14 +50,14 @@ public class DateUtils {
     long costTime = System.currentTimeMillis() - startTime;
     StringBuilder mess =
         new StringBuilder(String.valueOf(currentNum)).append(" of ").append(totalNum)
-            .append(", cost ").append(toString(costTime));
+            .append(", cost ").append(formatBetween(costTime));
     if (passedNum <= 0) {
       return mess.toString();
     }
 
     if (totalNum >= currentNum) {
       mess.append(", left ")
-          .append(toString((totalNum - passedNum) * (costTime / passedNum)));
+          .append(formatBetween((totalNum - passedNum) * (costTime / passedNum)));
     }
     return mess.toString();
   }
