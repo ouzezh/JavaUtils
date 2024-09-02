@@ -82,12 +82,12 @@ public class EasyExcelExtUtil extends EasyExcelUtil {
         }
     }
 
-    private static List<Map<Integer, String>> readNoModel(String pathName) {
+    public static List<Map<Integer, String>> readNoModel(String pathName) {
 //        List<Map<Integer, String>> list = new ArrayList<>();
 //        MyExcelListener<Map<Integer, String>> listener = new MyExcelListener<>(list::addAll);
 //        EasyExcel.read(pathName, listener).sheet().doRead();
-        List<Map<Integer, String>> list = EasyExcel.read(pathName).sheet().doReadSync();
-        return list;
+//        return list;
+        return EasyExcel.read(pathName).sheet().doReadSync();
     }
 
     public static <T> List<T> batchRead(String pathName, Class<T> clz, int... sheetNo) {
