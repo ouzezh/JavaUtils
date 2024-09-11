@@ -26,9 +26,12 @@ public class SymmetricCryptoDemo {
         // 生成密钥
         String key = Base64.encode(SecureUtil.generateKey(SymmetricAlgorithm.AES.getValue()).getEncoded());
         log.info("秘钥: " + key);
+        // 生成一个随机的 128 位 IV (对于 AES-128)
+        String iv = Base64.encode(randomBytes(16));
+        log.info("iv: " + iv);
 
         // 加密解密
-        String encryptHex = encryptHex(data, key);
+        String encryptHex = encryptBase64(data, key);
         String decryptStr = decryptStr(encryptHex, key);
         // 打印
         log.info("密文: " + encryptHex);
@@ -36,8 +39,8 @@ public class SymmetricCryptoDemo {
         Assert.isTrue(data.equals(decryptStr));
 
         // 带初始化向量(iv)加密解密：前端加密密文初始化向量通常是加密数据的前16个字节
-        String encryptHexCBC = encryptHexCBC(data, key);
-        String decryptStrCBC = decryptStrCBC(encryptHexCBC, key);
+        String encryptHexCBC = encryptBase64CBC(data, key, iv);
+        String decryptStrCBC = decryptStrCBC(encryptHexCBC, key, iv);
         // 打印
         log.info("带iv密文: " + encryptHexCBC);
         log.info("带iv明文: " + decryptStrCBC);
@@ -45,55 +48,28 @@ public class SymmetricCryptoDemo {
 
     }
 
-    private static String decryptStrCBC(String data, String key) {
-        // 将Base64编码的密文解码
-        byte[] cipherBytes = Base64.decode(data);
-
-        // 获取IV
-        byte[] ivBytes = new byte[16];
-        System.arraycopy(cipherBytes, 0, ivBytes, 0, ivBytes.length);
-
-        // 获取密文
-        byte[] cipherText = new byte[cipherBytes.length - 16];
-        System.arraycopy(cipherBytes, 16, cipherText, 0, cipherText.length);
-
-        AES aes = new AES("CBC", "PKCS7Padding", Base64.decode(key), ivBytes);
-        return new String(aes.decrypt(cipherText));
+    private static String decryptStrCBC(String data, String key, String iv) {
+        AES aes = new AES(Mode.CBC.name(), "PKCS7Padding", Base64.decode(key), Base64.decode(iv));
+        return aes.decryptStr(data);
     }
 
-    private static String encryptHexCBC(String data, String key) {
-        byte[] iv = RandomUtil.randomBytes(16);
-        AES aes = new AES("CBC", "PKCS7Padding", Base64.decode(key), iv);
-        byte[] encrypt = aes.encrypt(data);
-        return Base64.encode(concatAll(iv, encrypt));
+    private static String encryptBase64CBC(String data, String key, String iv) {
+        AES aes = new AES(Mode.CBC.name(), "PKCS7Padding", Base64.decode(key), Base64.decode(iv));
+        return aes.encryptBase64(data);
     }
 
-    private static byte[] concatAll(byte[]... arrays) {
-        int totalLength = 0;
-        for (byte[] array : arrays) {
-            totalLength += array.length;
-        }
-
-        byte[] result = new byte[totalLength];
-        int pos = 0;
-        for (byte[] array : arrays) {
-            System.arraycopy(array, 0, result, pos, array.length);
-            pos += array.length;
-        }
-        return result;
+    public static byte[] randomBytes(int length) {
+        return RandomUtil.randomBytes(length);
     }
 
     private static String decryptStr(String data, String key) {
-        // 构建
         AES aes = new AES(Mode.ECB, Padding.PKCS5Padding, Base64.decode(key));
         return aes.decryptStr(data, CharsetUtil.CHARSET_UTF_8);
     }
 
-    private static String encryptHex(String data, String key) {
-        // 构建
+    private static String encryptBase64(String data, String key) {
         AES aes = new AES(Mode.ECB, Padding.PKCS5Padding, Base64.decode(key));
-        // 加密为Base64表示
-        return aes.encryptHex(data);
+        return aes.encryptBase64(data);
     }
 
 }
