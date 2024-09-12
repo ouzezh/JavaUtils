@@ -14,7 +14,7 @@ import java.security.KeyPair;
  *
  * https://www.hutool.cn/docs/#/crypto/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86-AsymmetricCrypto
  */
-public class AsymmetricCryptoDemo {
+public class RsaDemo {
     public static void main(String[] args) {
         // 获取密钥
         KeyPair pair = SecureUtil.generateKeyPair("RSA");

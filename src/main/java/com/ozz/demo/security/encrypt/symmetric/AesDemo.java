@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
  * https://www.hutool.cn/docs/#/crypto/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86-SymmetricCrypto
  */
 @Slf4j
-public class SymmetricCryptoDemo {
+public class AesDemo {
     @SneakyThrows
     public static void main(String[] args) {
         String data = "test中文";
