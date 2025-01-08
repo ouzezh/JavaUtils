@@ -47,15 +47,15 @@ public class DateUtils {
         return DateUtil.formatBetween(millis);
     }
 
-    public static String getExpectedTime(long startTimeMillis, int passedCou, int totalCou) {
+    public static String getExpectedTime(long startMillis, long passedCou, long totalCou) {
         Assert.isTrue(passedCou > 0);
-        long costTime = System.currentTimeMillis() - startTimeMillis;
+        long costTime = System.currentTimeMillis() - startMillis;
         StringBuilder mess =
                 new StringBuilder(String.valueOf(passedCou)).append(" of ").append(totalCou)
                         .append(", cost ").append(formatBetween(costTime));
 
         if (totalCou >= passedCou) {
-            int leftCou = totalCou - passedCou;
+            long leftCou = totalCou - passedCou;
             mess.append(", left ")
                     .append(formatBetween((leftCou) * (costTime / passedCou)));
         }
