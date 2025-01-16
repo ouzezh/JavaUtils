@@ -38,7 +38,7 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    implementation 'cn.hutool:hutool-all:5.8.18'// Hutool是一个小而全的Java工具类库
+    implementation 'cn.hutool:hutool-all:5.8.35'// Hutool是一个小而全的Java工具类库
 
     implementation 'com.alibaba:easyexcel:3.3.4'
 //    implementation 'org.apache.commons:commons-compress:1.21'//压缩 Hutool CompressUtil
