@@ -57,7 +57,7 @@ public class DateUtils {
         if (totalCou >= passedCou) {
             long leftCou = totalCou - passedCou;
             mess.append(", left ")
-                    .append(formatBetween((leftCou) * (costTime / passedCou)));
+                    .append(formatBetween(costTime * leftCou / passedCou));
         }
         return mess.toString();
     }
