@@ -8,9 +8,7 @@ import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
-import com.alibaba.excel.write.handler.SheetWriteHandler;
 import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.alibaba.fastjson.JSON;
@@ -18,14 +16,16 @@ import com.ozz.demo.excel.easyexcel.listener.MyExcelListener;
 import com.ozz.demo.excel.easyexcel.model.MyExcelModel;
 import com.ozz.demo.path.ResourcePathUtil;
 import lombok.SneakyThrows;
-import org.apache.poi.ss.usermodel.*;
 
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class EasyExcelExtUtil extends EasyExcelUtil {
@@ -48,10 +48,9 @@ public class EasyExcelExtUtil extends EasyExcelUtil {
 
         // 自定义配置写
         try (ExcelWriter excel = EasyExcel.write(String.format("%s\\自定义配置写.xlsx", folder)).build()) {
-            writeSheet(excel, 0, null, MyExcelModel.class, data, sheetBuilder -> {
-                sheetBuilder.excludeColumnFieldNames(ListUtil.toList("date"));
-                return null;
-            });
+            writeSheet(excel, 0, null, MyExcelModel.class, data, sheetBuilder ->
+                sheetBuilder.excludeColumnFieldNames(ListUtil.toList("date"))
+            );
         }
 
         // 动态表头写
@@ -83,10 +82,6 @@ public class EasyExcelExtUtil extends EasyExcelUtil {
     }
 
     public static List<Map<Integer, String>> readNoModel(String pathName) {
-//        List<Map<Integer, String>> list = new ArrayList<>();
-//        MyExcelListener<Map<Integer, String>> listener = new MyExcelListener<>(list::addAll);
-//        EasyExcel.read(pathName, listener).sheet().doRead();
-//        return list;
         return EasyExcel.read(pathName).sheet().doReadSync();
     }
 
@@ -121,23 +116,24 @@ public class EasyExcelExtUtil extends EasyExcelUtil {
         writeSheet(excel, sheetNo, sheetName, clazz, data, null);
     }
 
-    public static <T> void writeSheet(ExcelWriter excel, Integer sheetNo, String sheetName, Class<T> header,
-                                      List<T> data,
-                                      Function<ExcelWriterSheetBuilder, Collection<SheetWriteHandler>> custom) {
+    public static <T> void writeSheet(ExcelWriter excel, Integer sheetNo, String sheetName, Class<T> header, List<T> data, Consumer<ExcelWriterSheetBuilder> custom) {
         writeSheet(excel, sheetNo, sheetName, data, builder -> {
             builder.head(header);
-            return custom != null ? custom.apply(builder) : null;
+            if(custom != null) {
+                custom.accept(builder);
+            }
         });
     }
 
-    public static <T> void writeSheet(ExcelWriter excel, Integer sheetNo, String sheetName, List<List<String>> header
-            , List<T> data, Function<ExcelWriterSheetBuilder, Collection<SheetWriteHandler>> custom) {
+    public static <T> void writeSheet(ExcelWriter excel, Integer sheetNo, String sheetName, List<List<String>> header, List<T> data, Consumer<ExcelWriterSheetBuilder> custom) {
         writeSheet(excel, sheetNo, sheetName, data, builder -> {
             builder.head(header);
             builder.registerWriteHandler(new LongestMatchColumnWidthStyleStrategy());
             builder.registerWriteHandler( // row 水平行 默认样式
                     new HorizontalCellStyleStrategy(getDefaultCellStyle(true), getDefaultCellStyle(false)));
-            return custom != null ? custom.apply(builder) : null;
+            if(custom != null) {
+                custom.accept(builder);
+            }
         });
     }
 
@@ -152,12 +148,10 @@ public class EasyExcelExtUtil extends EasyExcelUtil {
      *                  参数: 用于修改Excel初始化配置,如果执行ExcelWriterSheetBuilder.excludeColumnFiledNames排除字段;
      *                  返回值: 用于提供Excel自定义修改的Handler,如SheetWriteHandler设置单元格合并
      */
-    private static <T> void writeSheet(ExcelWriter excel, Integer sheetNo, String sheetName, List<T> data,
-                                       Function<ExcelWriterSheetBuilder, Collection<SheetWriteHandler>> custom) {
+    private static <T> void writeSheet(ExcelWriter excel, Integer sheetNo, String sheetName, List<T> data, Consumer<ExcelWriterSheetBuilder> custom) {
         ExcelWriterSheetBuilder builder = EasyExcelFactory.writerSheet(sheetNo, sheetName).autoTrim(true);
         if (custom != null) {
-            Collection<SheetWriteHandler> writeHandler = custom.apply(builder);
-            Optional.ofNullable(writeHandler).ifPresent(l -> l.forEach(builder::registerWriteHandler));
+            custom.accept(builder);
         }
         WriteSheet sheet = builder.build();
         excel.write(data, sheet);// 可重复多次写入
