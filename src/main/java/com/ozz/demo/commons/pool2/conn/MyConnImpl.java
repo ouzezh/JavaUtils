@@ -20,6 +20,7 @@ public class MyConnImpl implements MyConn {
 
     @Override
     public void close() {
+        // this.closeStatements(); -- 参考 com.zaxxer.hikari.pool.ProxyConnection.close()
         StaticLog.debug("close {}", toString());
     }
 
