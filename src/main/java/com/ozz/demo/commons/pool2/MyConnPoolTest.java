@@ -49,7 +49,6 @@ public class MyConnPoolTest {
                 log.info("test {} start", i);
                 try(MyProxyConn conn = pool.borrowObject()) {
                     log.info("borrow a connection: {}", conn);
-                    Thread.sleep(60000);
                 }
                 log.info("test {} end", i);
             }
