@@ -38,7 +38,7 @@ public class MyConnPoolTest {
         AbandonedConfig abandonedConfig = new AbandonedConfig();
         abandonedConfig.setRemoveAbandonedOnBorrow(false);
         abandonedConfig.setRemoveAbandonedOnMaintenance(true);
-        abandonedConfig.setRemoveAbandonedTimeout(Duration.ofMinutes(30));
+        abandonedConfig.setRemoveAbandonedTimeout(Duration.ofSeconds(5));
         abandonedConfig.setLogAbandoned(true);
         abandonedConfig.setRequireFullStackTrace(true);
         abandonedConfig.setUseUsageTracking(true);// 设置为true时，requireFullStackTrace=true才生效

@@ -1,7 +1,6 @@
 package com.ozz.demo.commons.pool2.conn;
 
 import cn.hutool.core.lang.Assert;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.BasePooledObjectFactory;
