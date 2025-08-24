@@ -26,14 +26,13 @@ public class MyConnPoolTest {
         GenericObjectPoolConfig<MyProxyConn> config = new GenericObjectPoolConfig<>();
         config.setMaxTotal(GenericObjectPoolConfig.DEFAULT_MAX_TOTAL);
         config.setMinIdle(1);
-        config.setMaxTotal(10);
         config.setMaxIdle(config.getMaxTotal());// 最大空闲的数量
-        config.setMaxWait(Duration.ofSeconds(60));// 连接超时时间
+        config.setMaxWait(Duration.ofSeconds(300));// 连接超时时间
         config.setTestOnCreate(false);
         config.setTestOnBorrow(true);
         config.setTestOnReturn(false);
         config.setTestWhileIdle(true);// 空闲检测时校验有效性
-        config.setTimeBetweenEvictionRuns(Duration.ofSeconds(5));// 空闲检测周期（必须设置，否则空闲连接永远不会过期）
+        config.setTimeBetweenEvictionRuns(Duration.ofMinutes(5));// 空闲检测周期（必须设置，否则空闲连接永远不会过期）
         config.setMinEvictableIdleTime(Duration.ofMinutes(10));// 空闲检测时，空闲时长高于此值则移除
 
         AbandonedConfig abandonedConfig = new AbandonedConfig();
@@ -42,7 +41,7 @@ public class MyConnPoolTest {
         abandonedConfig.setRemoveAbandonedTimeout(Duration.ofMinutes(30));
         abandonedConfig.setLogAbandoned(true);
         abandonedConfig.setRequireFullStackTrace(true);
-        abandonedConfig.setUseUsageTracking(true);
+        abandonedConfig.setUseUsageTracking(true);// 设置为true时，requireFullStackTrace=true才生效
 
         try (MyGenericObjectPool<MyProxyConn> pool = new MyGenericObjectPool<>(factory, config)) {
 //      Runtime.getRuntime().addShutdownHook(new Thread(() -> pool.close()));
