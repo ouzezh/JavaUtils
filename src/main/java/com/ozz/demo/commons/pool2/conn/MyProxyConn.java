@@ -1,35 +1,61 @@
 package com.ozz.demo.commons.pool2.conn;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.sql.*;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.Executor;
 
+@Slf4j
 public class MyProxyConn implements Connection {
     protected Connection realConn;
-    protected MyGenericObjectPool pool;
+    protected MyGenericObjectPool<MyProxyConn> pool;
     protected boolean isClosed;
+    private final Set<Statement> activeStatements = Collections.synchronizedSet(new HashSet<>());
 
     public MyProxyConn(Connection realConn) {
         this.realConn = realConn;
     }
 
-    /*
-     实现所有接口方法，直接调用实际连接对象
-     */
+    private void trackStatement(Statement stmt) {
+        activeStatements.add(stmt);
+    }
+
+    public void closeAllStatements() {
+        synchronized (activeStatements) {
+            for (Statement stmt : activeStatements) {
+                try {
+                    if (!stmt.isClosed()) {
+                        stmt.close();
+                    }
+                } catch (SQLException e) {
+                    // 记录日志但继续处理其他statement
+                    log.error("closeAllStatements fail", e);
+                }
+            }
+            activeStatements.clear();
+        }
+    }
+
     @Override
     public Statement createStatement() throws SQLException {
-        return realConn.createStatement();
+        Statement stmt = realConn.createStatement();
+        trackStatement(stmt);
+        return stmt;
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql) throws SQLException {
-        return realConn.prepareStatement(sql);
+        PreparedStatement stmt = realConn.prepareStatement(sql);
+        trackStatement(stmt);
+        return stmt;
     }
 
     @Override
     public CallableStatement prepareCall(String sql) throws SQLException {
-        return realConn.prepareCall(sql);
+        CallableStatement stmt = realConn.prepareCall(sql);
+        trackStatement(stmt);
+        return stmt;
     }
 
     @Override
@@ -59,6 +85,7 @@ public class MyProxyConn implements Connection {
 
     @Override
     public void close() throws SQLException {
+        closeAllStatements(); // 在返回连接池前关闭所有statement
         pool.returnObject(this);
         this.isClosed = true;
     }
@@ -123,17 +150,23 @@ public class MyProxyConn implements Connection {
 
     @Override
     public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
-        return realConn.createStatement(resultSetType, resultSetConcurrency);
+        Statement stmt = realConn.createStatement(resultSetType, resultSetConcurrency);
+        trackStatement(stmt);
+        return stmt;
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-        return realConn.prepareStatement(sql, resultSetType, resultSetConcurrency);
+        PreparedStatement stmt = realConn.prepareStatement(sql, resultSetType, resultSetConcurrency);
+        trackStatement(stmt);
+        return stmt;
     }
 
     @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-        return realConn.prepareCall(sql, resultSetType, resultSetConcurrency);
+        CallableStatement stmt = realConn.prepareCall(sql, resultSetType, resultSetConcurrency);
+        trackStatement(stmt);
+        return stmt;
     }
 
     @Override
@@ -178,32 +211,44 @@ public class MyProxyConn implements Connection {
 
     @Override
     public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        return realConn.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
+        Statement stmt = realConn.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
+        trackStatement(stmt);
+        return stmt;
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        return realConn.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
+        PreparedStatement stmt = realConn.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
+        trackStatement(stmt);
+        return stmt;
     }
 
     @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        return realConn.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
+        CallableStatement stmt = realConn.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
+        trackStatement(stmt);
+        return stmt;
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
-        return realConn.prepareStatement(sql, autoGeneratedKeys);
+        PreparedStatement stmt = realConn.prepareStatement(sql, autoGeneratedKeys);
+        trackStatement(stmt);
+        return stmt;
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
-        return realConn.prepareStatement(sql, columnIndexes);
+        PreparedStatement stmt = realConn.prepareStatement(sql, columnIndexes);
+        trackStatement(stmt);
+        return stmt;
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
-        return realConn.prepareStatement(sql, columnNames);
+        PreparedStatement stmt = realConn.prepareStatement(sql, columnNames);
+        trackStatement(stmt);
+        return stmt;
     }
 
     @Override

@@ -61,6 +61,7 @@ public class MyConnFactory extends BasePooledObjectFactory<MyProxyConn> {
     @Override
     public void destroyObject(final PooledObject<MyProxyConn> p) {
         log.info("destroyObject: {}", p.getObject().toString());
+        p.getObject().closeAllStatements();
         if(!p.getObject().realIsClosed()) {
             p.getObject().realClose();
         }
@@ -97,6 +98,7 @@ public class MyConnFactory extends BasePooledObjectFactory<MyProxyConn> {
      */
     @Override
     public void passivateObject(PooledObject<MyProxyConn> p) {
+        p.getObject().closeAllStatements();
         log.info("passivateObject: {}", p.getObject().toString());
     }
 
