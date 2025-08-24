@@ -49,6 +49,8 @@ dependencies {
     implementation 'org.openjdk.jol:jol-core:0.16'// 打印对象布局
     implementation 'com.littlenb:snowflake:1.0.5'// 雪花算法
     implementation 'org.bouncycastle:bcprov-jdk15to18:1.78.1'// 加密算法支持PKCS7Padding
+    implementation 'p6spy:p6spy:3.9.1' // jdbc 打印 sql
+    implementation 'org.xerial:sqlite-jdbc:3.49.1.0'
 
 //    // JMH
 //    implementation 'org.openjdk.jmh:jmh-core:1.34'
