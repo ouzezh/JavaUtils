@@ -22,8 +22,8 @@ public class MyConnPoolImpl<T extends AutoCloseable> implements MyConnPool {
         config.setTestOnBorrow(false);
         config.setTestOnReturn(false);
         config.setTestWhileIdle(true);// 空闲检测时校验有效性
-        config.setTimeBetweenEvictionRuns(Duration.ofMinutes(30));// 空闲检测周期（必须设置，否则空闲连接永远不会过期）
-        config.setMinEvictableIdleTime(Duration.ofMinutes(30));// 空闲检测时，空闲时长高于此值则移除
+        config.setTimeBetweenEvictionRuns(Duration.ofMinutes(10));// 空闲检测周期（必须设置，否则空闲连接永远不会过期）
+        config.setMinEvictableIdleTime(Duration.ofMinutes(10));// 空闲检测时，空闲时长高于此值则移除
 
         Type genericSuperclass = factory.getClass().getGenericSuperclass();
         if (genericSuperclass instanceof ParameterizedType) {
