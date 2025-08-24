@@ -11,19 +11,19 @@ public class MyProxyConn implements Connection {
     protected Connection realConn;
     protected MyGenericObjectPool<MyProxyConn> pool;
     protected boolean isClosed;
-    private final Set<Statement> activeStatements = Collections.synchronizedSet(new HashSet<>());
+    private final Set<Statement> openStatements = Collections.synchronizedSet(new HashSet<>());
 
     public MyProxyConn(Connection realConn) {
         this.realConn = realConn;
     }
 
     private void trackStatement(Statement stmt) {
-        activeStatements.add(stmt);
+        openStatements.add(stmt);
     }
 
     public void closeAllStatements() {
-        synchronized (activeStatements) {
-            for (Statement stmt : activeStatements) {
+        synchronized (openStatements) {
+            for (Statement stmt : openStatements) {
                 try {
                     if (!stmt.isClosed()) {
                         stmt.close();
@@ -33,7 +33,7 @@ public class MyProxyConn implements Connection {
                     log.error("closeAllStatements fail", e);
                 }
             }
-            activeStatements.clear();
+            openStatements.clear();
         }
     }
 
