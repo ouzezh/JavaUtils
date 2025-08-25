@@ -33,7 +33,7 @@ public class MyConnPoolTest {
         poolConfig.setTestOnReturn(false);
         poolConfig.setTestWhileIdle(true);// 空闲检测时校验有效性
         poolConfig.setTimeBetweenEvictionRuns(Duration.ofMinutes(5));// 空闲检测周期（必须设置，否则空闲连接永远不会过期）
-        poolConfig.setMinEvictableIdleDuration(Duration.ofMinutes(10));// 空闲检测时，空闲时长高于此值则移除
+        poolConfig.setMinEvictableIdleDuration(Duration.ofMinutes(20));// 空闲检测时，空闲时长高于此值则移除
 
         AbandonedConfig abandonedConfig = new AbandonedConfig();
         abandonedConfig.setRemoveAbandonedOnBorrow(false);
