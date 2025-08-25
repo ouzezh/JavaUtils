@@ -33,12 +33,12 @@ public class MyConnPoolTest {
         poolConfig.setTestOnReturn(false);
         poolConfig.setTestWhileIdle(true);// 空闲检测时校验有效性
         poolConfig.setTimeBetweenEvictionRuns(Duration.ofMinutes(5));// 空闲检测周期（必须设置，否则空闲连接永远不会过期）
-        poolConfig.setMinEvictableIdleTime(Duration.ofMinutes(10));// 空闲检测时，空闲时长高于此值则移除
+        poolConfig.setMinEvictableIdleDuration(Duration.ofMinutes(10));// 空闲检测时，空闲时长高于此值则移除
 
         AbandonedConfig abandonedConfig = new AbandonedConfig();
         abandonedConfig.setRemoveAbandonedOnBorrow(false);
         abandonedConfig.setRemoveAbandonedOnMaintenance(true);
-        abandonedConfig.setRemoveAbandonedTimeout(Duration.ofSeconds(5));
+        abandonedConfig.setRemoveAbandonedTimeout(Duration.ofMinutes(30));
         abandonedConfig.setLogAbandoned(true);
         abandonedConfig.setRequireFullStackTrace(true);
         abandonedConfig.setUseUsageTracking(true);// 设置为true时，requireFullStackTrace=true才生效
