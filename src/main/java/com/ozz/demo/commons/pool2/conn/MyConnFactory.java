@@ -12,6 +12,7 @@ import java.sql.Driver;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 public class MyConnFactory extends BasePooledObjectFactory<MyProxyConn> {
@@ -20,6 +21,7 @@ public class MyConnFactory extends BasePooledObjectFactory<MyProxyConn> {
     private String validateSql;
     private Properties driverProperties;
     protected MyGenericObjectPool pool;
+    private static final AtomicLong id = new AtomicLong(0);
 
     public MyConnFactory(Driver driver, String jdbcUrl, String username, String password, String validateSql) {
         this.driver = driver;
@@ -42,7 +44,7 @@ public class MyConnFactory extends BasePooledObjectFactory<MyProxyConn> {
     public MyProxyConn create() {
         log.info("create");
         Connection conn = driver.connect(jdbcUrl, driverProperties);
-        MyProxyConn myConn = new MyProxyConn(conn);
+        MyProxyConn myConn = new MyProxyConn(conn, id.incrementAndGet());
         Assert.notNull(pool, "pool is empty");
         myConn.pool = pool;
         return myConn;
@@ -91,6 +93,7 @@ public class MyConnFactory extends BasePooledObjectFactory<MyProxyConn> {
     @Override
     public void activateObject(final PooledObject<MyProxyConn> p) {
         log.info("activateObject: {}", p.getObject().toString());
+        p.getObject().closeAllStatements();
     }
 
     /**

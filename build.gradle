@@ -44,7 +44,7 @@ dependencies {
 //    implementation 'org.apache.commons:commons-compress:1.21'//压缩 Hutool CompressUtil
     implementation 'org.apache.commons:commons-csv:1.9.0'
     implementation 'com.google.zxing:core:3.4.1'//谷歌二维码 Hutool
-    implementation 'org.apache.commons:commons-pool2:2.11.1'//通用连接池
+    implementation 'org.apache.commons:commons-pool2:2.12.1'//通用连接池
     implementation 'com.alibaba:fastjson:1.2.83'
     implementation 'org.openjdk.jol:jol-core:0.16'// 打印对象布局
     implementation 'com.littlenb:snowflake:1.0.5'// 雪花算法

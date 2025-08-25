@@ -8,12 +8,13 @@ import java.util.concurrent.Executor;
 
 @Slf4j
 public class MyProxyConn implements Connection {
+    private Long id;
     protected Connection realConn;
     protected MyGenericObjectPool<MyProxyConn> pool;
     protected boolean isClosed;
     private final Set<Statement> openStatements = Collections.synchronizedSet(new HashSet<>());
 
-    public MyProxyConn(Connection realConn) {
+    public MyProxyConn(Connection realConn, Long id) {
         this.realConn = realConn;
     }
 
@@ -35,6 +36,11 @@ public class MyProxyConn implements Connection {
             }
             openStatements.clear();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "MyProxyConn{id=" + id + '}';
     }
 
     @Override
