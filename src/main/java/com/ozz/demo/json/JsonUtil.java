@@ -1,12 +1,14 @@
 package com.ozz.demo.json;
 
-import cn.hutool.log.StaticLog;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.ozz.demo.json.model.Item;
 import com.ozz.demo.json.model.Page;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.List;
 
+@Slf4j
 public class JsonUtil {
 
   public static void main(String[] args) {
@@ -17,11 +19,11 @@ public class JsonUtil {
     });
     // 链接2
     rows = parseArray(rowsJson, Item.class);
-    StaticLog.info(JsonUtil.toJSONString(rows));
+    log.info(JsonUtil.toJSONString(rows));
     // 复杂对象
     Page<Item> page = parseObject("{\"rows\":" + rowsJson + "}", new TypeReference<Page<Item>>() {
     });
-    StaticLog.info(JsonUtil.toJSONString(page));
+    log.info(JsonUtil.toJSONString(page));
   }
 
   public static String toJSONString(Object object) {

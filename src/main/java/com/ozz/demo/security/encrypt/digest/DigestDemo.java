@@ -1,14 +1,15 @@
 package com.ozz.demo.security.encrypt.digest;
 
 import cn.hutool.crypto.SecureUtil;
-import cn.hutool.log.StaticLog;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 
 /**
  * 数据摘要
  */
+@Slf4j
 public class DigestDemo {
     @SneakyThrows
     public static String md5(File file) {
@@ -21,6 +22,6 @@ public class DigestDemo {
 
     public static void main(String[] args) {
         String data = "my test";
-        StaticLog.info(md5(data));
+        log.info(md5(data));
     }
 }

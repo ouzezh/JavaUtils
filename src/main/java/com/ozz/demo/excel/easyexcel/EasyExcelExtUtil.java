@@ -1,7 +1,6 @@
 package com.ozz.demo.excel.easyexcel;
 
 import cn.hutool.core.collection.ListUtil;
-import cn.hutool.log.StaticLog;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.ExcelReader;
@@ -16,6 +15,7 @@ import com.ozz.demo.excel.easyexcel.listener.MyExcelListener;
 import com.ozz.demo.excel.easyexcel.model.MyExcelModel;
 import com.ozz.demo.path.ResourcePathUtil;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.nio.file.Files;
@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class EasyExcelExtUtil extends EasyExcelUtil {
 
     @SneakyThrows
@@ -40,11 +41,11 @@ public class EasyExcelExtUtil extends EasyExcelUtil {
         // 不创建对象读
         String pathName = String.format("%s\\简单读写.xlsx", folder);
         List<Map<Integer, String>> list2 = readNoModel(pathName);
-        StaticLog.info(list2.stream().map(JSON::toJSONString).collect(Collectors.joining("\r\n", "\r\n", "")));
+        log.info(list2.stream().map(JSON::toJSONString).collect(Collectors.joining("\r\n", "\r\n", "")));
 
         // 分批读
         List<MyExcelModel> list3 = batchRead(pathName, MyExcelModel.class);
-        StaticLog.info(list3.stream().map(JSON::toJSONString).collect(Collectors.joining("\r\n", "\r\n", "")));
+        log.info(list3.stream().map(JSON::toJSONString).collect(Collectors.joining("\r\n", "\r\n", "")));
 
         // 自定义配置写
         try (ExcelWriter excel = EasyExcel.write(String.format("%s\\自定义配置写.xlsx", folder)).build()) {

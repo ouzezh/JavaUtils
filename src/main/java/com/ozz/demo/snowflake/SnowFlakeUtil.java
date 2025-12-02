@@ -2,13 +2,13 @@ package com.ozz.demo.snowflake;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.log.StaticLog;
 import com.littlenb.snowflake.sequence.IdGenerator;
 import com.littlenb.snowflake.support.ElasticIdGeneratorFactory;
 import com.littlenb.snowflake.support.MillisIdGeneratorFactory;
 import com.littlenb.snowflake.support.SecondsIdGeneratorFactory;
 import com.littlenb.snowflake.worker.WorkerIdAssigner;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -18,13 +18,14 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * https://github.com/littlenb/snowflake
  */
+@Slf4j
 public class SnowFlakeUtil {
     @SneakyThrows
     public static void main(String[] args) {
         IdGenerator idGenerator = getMillisIdGenerator(DateUtil.parseDate("2022-03-10"), 0);
         long id = idGenerator.nextId();
-        StaticLog.info(StrUtil.toString(id));
-        StaticLog.info(idGenerator.parse(id));
+        log.info(StrUtil.toString(id));
+        log.info(idGenerator.parse(id));
     }
 
     public static IdGenerator getIdGenerator(Date epochTimestamp, WorkerIdAssigner workerIdAssigner) {

@@ -1,16 +1,17 @@
 package com.ozz.demo.jvm;
 
-import cn.hutool.log.StaticLog;
-import org.openjdk.jol.info.ClassLayout;
+import lombok.extern.slf4j.Slf4j;
+//import org.openjdk.jol.info.ClassLayout;
 
+@Slf4j
 public class ClassLayoutTest {
     /**
      * 打印对象内存布局
      */
     public static void main(String[] args) {
-        StaticLog.info("ClassLayout: new Object()");
-        StaticLog.info(ClassLayout.parseInstance(new Object()).toPrintable());
-        StaticLog.info("ClassLayout: new int[]{1}");
-        StaticLog.info(ClassLayout.parseInstance(new int[]{1}).toPrintable());
+//        log.info("ClassLayout: new Object()");
+//        log.info(ClassLayout.parseInstance(new Object()).toPrintable());
+//        log.info("ClassLayout: new int[]{1}");
+//        log.info(ClassLayout.parseInstance(new int[]{1}).toPrintable());
     }
 }

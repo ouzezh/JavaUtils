@@ -1,18 +1,19 @@
 package com.ozz.demo.path;
 
-import cn.hutool.log.StaticLog;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.net.URL;
 
+@Slf4j
 public class ResourcePathUtil {
 
   public static void main(String[] args) {
-    StaticLog.info(getHomeDirectory());
-    StaticLog.info(getWorkspacePath());
-    StaticLog.info(getProjectPath());
-    StaticLog.info(getResourcePath());
+    log.info(getHomeDirectory());
+    log.info(getWorkspacePath());
+    log.info(getProjectPath());
+    log.info(getResourcePath());
   }
 
   public static String getHomeDirectory() {

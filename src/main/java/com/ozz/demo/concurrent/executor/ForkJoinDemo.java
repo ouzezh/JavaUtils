@@ -1,12 +1,13 @@
 package com.ozz.demo.concurrent.executor;
 
-import cn.hutool.log.StaticLog;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
 
+@Slf4j
 public class ForkJoinDemo {
 
     private static final Integer MAX = 20;
@@ -25,7 +26,7 @@ public class ForkJoinDemo {
         @Override
         protected Integer compute() {
             if (endValue - startValue <= MAX) {
-                StaticLog.info(String.format("fork execute: thread=%s, startValue=%s, endValue=%s",
+                log.info(String.format("fork execute: thread=%s, startValue=%s, endValue=%s",
                         Thread.currentThread().getId(), startValue, endValue));
                 Integer totalValue = 0;
                 for (int index = this.startValue; index <= this.endValue; index++) {
@@ -44,7 +45,7 @@ public class ForkJoinDemo {
 
     @SneakyThrows
     public static void main(String[] args) {
-        StaticLog.info("CommonPoolParallelism = " + ForkJoinPool.getCommonPoolParallelism());
+        log.info("CommonPoolParallelism = " + ForkJoinPool.getCommonPoolParallelism());
 
         ForkJoinPool pool = new ForkJoinPool(ForkJoinPool.getCommonPoolParallelism());
 //    ForkJoinPool pool = ForkJoinPool.commonPool();
@@ -52,12 +53,12 @@ public class ForkJoinDemo {
 
         // 同步获取结果
         Integer result1 = pool.invoke(new MyForkJoinTask(1, 10));
-        StaticLog.info("result = " + result1);
+        log.info("result = " + result1);
 
         // 异步获取结果
         ForkJoinTask<Integer> taskFuture = pool.submit(new MyForkJoinTask(1, 100));
         Integer result2 = taskFuture.get();
-        StaticLog.info("result = " + result2);
+        log.info("result = " + result2);
 
         pool.shutdown();
     }

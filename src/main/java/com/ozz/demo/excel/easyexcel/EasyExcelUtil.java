@@ -2,19 +2,18 @@ package com.ozz.demo.excel.easyexcel;
 
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.log.StaticLog;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
-import com.alibaba.excel.write.style.column.AbstractColumnWidthStyleStrategy;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.alibaba.fastjson.JSON;
 import com.ozz.demo.excel.easyexcel.model.MyExcelModel;
 import com.ozz.demo.path.ResourcePathUtil;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.FileInputStream;
@@ -28,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class EasyExcelUtil {
 
     @SneakyThrows
@@ -46,9 +46,9 @@ public class EasyExcelUtil {
         // 简单读
         try(InputStream inout = new FileInputStream(pathName)) {
             List<MyExcelModel> list = read(inout, MyExcelModel.class);
-            StaticLog.info(JSON.toJSONString(list));
+            log.info(JSON.toJSONString(list));
         }
-        StaticLog.info("你好");
+        log.info("你好");
         System.out.println("你好");
     }
 

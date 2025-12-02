@@ -2,8 +2,8 @@ package com.ozz.demo.net;
 
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.log.StaticLog;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
@@ -12,10 +12,11 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+@Slf4j
 public class NetUtilDemo {
     public static void main(String[] args) {
         for (InetAddress item : getLocalHost()) {
-            StaticLog.info(item.getHostAddress());
+            log.info(item.getHostAddress());
         }
     }
 

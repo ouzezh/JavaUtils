@@ -1,7 +1,7 @@
 package com.ozz.demo.text;
 
 import cn.hutool.core.lang.Assert;
-import cn.hutool.log.StaticLog;
+import lombok.extern.slf4j.Slf4j;
 
 import java.text.DecimalFormat;
 import java.util.LinkedList;
@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
  * 英文与数字转化
  *
  */
+@Slf4j
 public class NumberFormatUtil {
 
     private static final Pattern PATTERN = Pattern.compile("[A-Za-z]+");
@@ -48,12 +49,12 @@ public class NumberFormatUtil {
 
     public static void printNumber() {
         double d = 12.123d;
-        StaticLog.info(new DecimalFormat("#.##").format(0.123D));
-        StaticLog.info(new DecimalFormat("#.##").format(12.2D));
-        StaticLog.info(new DecimalFormat("#.##").format(d));
-        StaticLog.info(new DecimalFormat("#.##%").format(0.0123));
-        StaticLog.info(new DecimalFormat("00.00").format(d));
-        StaticLog.info(new DecimalFormat(",###.00").format(d * 1000));
+        log.info(new DecimalFormat("#.##").format(0.123D));
+        log.info(new DecimalFormat("#.##").format(12.2D));
+        log.info(new DecimalFormat("#.##").format(d));
+        log.info(new DecimalFormat("#.##%").format(0.0123));
+        log.info(new DecimalFormat("00.00").format(d));
+        log.info(new DecimalFormat(",###.00").format(d * 1000));
     }
 
     public static void main(String[] args) {

@@ -1,14 +1,15 @@
 package com.ozz.demo.excel.easyexcel.listener;
 
-import cn.hutool.log.StaticLog;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Slf4j
 public class MyExcelListener<T> extends AnalysisEventListener<T> {
     // 每隔1000条消费数据，然后清理list
     private int batchCount = 1000;
@@ -31,7 +32,7 @@ public class MyExcelListener<T> extends AnalysisEventListener<T> {
      */
     @Override
     public void invoke(T data, AnalysisContext context) {
-        StaticLog.debug("解析行{}: {}", context.readRowHolder().getRowIndex()+1, JSON.toJSONString(data));
+        log.debug("解析行{}: {}", context.readRowHolder().getRowIndex()+1, JSON.toJSONString(data));
         cachedDataList.add(data);
         // 达到批处理次数，释放缓存
         if (cachedDataList.size() >= batchCount) {
@@ -45,16 +46,16 @@ public class MyExcelListener<T> extends AnalysisEventListener<T> {
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
         consumerData();
-        StaticLog.debug("所有数据解析完成！");
+        log.debug("所有数据解析完成！");
     }
 
     /**
      * 消费数据
      */
     private void consumerData() {
-        StaticLog.debug("{}条数据，开始消费！", cachedDataList.size());
+        log.debug("{}条数据，开始消费！", cachedDataList.size());
         consumer.accept(cachedDataList);
         cachedDataList = new ArrayList<>(batchCount);// 消费完成清理 list
-        StaticLog.debug("消费成功！");
+        log.debug("消费成功！");
     }
 }

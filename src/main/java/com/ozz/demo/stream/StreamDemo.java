@@ -1,11 +1,12 @@
 package com.ozz.demo.stream;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.log.StaticLog;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 public class StreamDemo {
 
   public static void main(String[] args) {
@@ -18,9 +19,9 @@ public class StreamDemo {
     boolean bb = strs.stream().allMatch(str -> str.equals("a"));
     boolean cc = strs.stream().noneMatch(str -> str.equals("a"));
     long count = strs.stream().filter(str -> str.equals("a")).count();
-    StaticLog.info(StrUtil.toString(aa));// TRUE
-    StaticLog.info(StrUtil.toString(bb));// FALSE
-    StaticLog.info(StrUtil.toString(cc));// FALSE
-    StaticLog.info(StrUtil.toString(count));// 3
+    log.info(StrUtil.toString(aa));// TRUE
+    log.info(StrUtil.toString(bb));// FALSE
+    log.info(StrUtil.toString(cc));// FALSE
+    log.info(StrUtil.toString(count));// 3
   }
 }

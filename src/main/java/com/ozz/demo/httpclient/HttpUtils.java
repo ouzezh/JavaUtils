@@ -6,10 +6,10 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
-import cn.hutool.log.StaticLog;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.*;
+import java.io.File;
 import java.net.HttpCookie;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -17,14 +17,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class HttpUtils {
     public static void main(String[] args) {
         Map<String, String> header = Collections.singletonMap("testHeader", "text/plain");
         Map<String, String> cookie = Collections.singletonMap("testCookie", "xx");
 
-        StaticLog.info(get("https://www.baidu.com?p=v", Collections.singletonMap("testP", "testV"), header, cookie));
+        log.info(get("https://www.baidu.com?p=v", Collections.singletonMap("testP", "testV"), header, cookie));
 
-        StaticLog.info(post("https://www.baidu.com", "{\"myBody\":0}", header, cookie));
+        log.info(post("https://www.baidu.com", "{\"myBody\":0}", header, cookie));
 
 //        upload("http://localhost:8080/v1/test/upload",
 //                new File("C:\\Users\\ouzezhou\\Desktop\\Temp\\202108\\intellij-java-google-style.xml"));
@@ -72,7 +73,7 @@ public class HttpUtils {
 //        HttpUtil.createGet(url).execute().bodyStream();
 //        long size = HttpUtil.downloadFile(url, FileUtil.file("C:/"));
         String fileStr = HttpUtil.downloadString(url, StandardCharsets.UTF_8);
-        StaticLog.info("Download file: " + fileStr);
+        log.info("Download file: " + fileStr);
     }
 
     private static HttpRequest setParam(HttpRequest req, Map<String,Object> paramMap, String body, Map<String,String> headers, Map<String,String> cookies) {

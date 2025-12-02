@@ -1,10 +1,11 @@
 package com.ozz.demo.proxy.model;
 
-import cn.hutool.log.StaticLog;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MyCar implements Runnable {
   @Override
   public void run() {
-    StaticLog.info("running...");
+    log.info("running...");
   }
 }

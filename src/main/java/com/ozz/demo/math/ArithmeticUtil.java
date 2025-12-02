@@ -1,5 +1,9 @@
 package com.ozz.demo.math;
 
+import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.Assert;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
@@ -8,13 +12,10 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.log.StaticLog;
-import org.springframework.util.Assert;
-
 /**
  * 计算步骤： 1.中辍表达式转后缀 2.计算后缀表达式
  */
+@Slf4j
 public class ArithmeticUtil {
 
   /**
@@ -53,7 +54,7 @@ public class ArithmeticUtil {
   public static void main(String[] args) {
     String expression = "-2.5+(-1+3)*3-1/2+(1/3+1)*3";
     double res = execute(expression);
-    StaticLog.info(StrUtil.toString(res));
+    log.info(StrUtil.toString(res));
     Assert.state(res == 7, "result error");
   }
 

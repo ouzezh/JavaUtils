@@ -1,12 +1,13 @@
 package com.ozz.demo.concurrent.executor;
 
-import cn.hutool.log.StaticLog;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
+@Slf4j
 public class ExecutorDemo {
     @SneakyThrows
     public static void main(String[] args) {
@@ -16,7 +17,7 @@ public class ExecutorDemo {
             List<Future> fuList = new ArrayList<>();
             for (int i = 1; i <= 10; i++) {
                 int finalI = i;
-                Future<?> fu = fixedPool.submit(() -> StaticLog.info(String.format("thread %s - task %02d",
+                Future<?> fu = fixedPool.submit(() -> log.info(String.format("thread %s - task %02d",
                         Thread.currentThread().getId(), finalI)));
                 fuList.add(fu);
             }

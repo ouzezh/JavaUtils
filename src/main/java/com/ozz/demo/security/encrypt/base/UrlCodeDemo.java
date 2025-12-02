@@ -1,16 +1,13 @@
 package com.ozz.demo.security.encrypt.base;
 
-import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.URLUtil;
-import cn.hutool.log.StaticLog;
 import lombok.SneakyThrows;
-
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * URL编码
  */
+@Slf4j
 public class UrlCodeDemo {
     @SneakyThrows
     public static String urlEncode(String s) {
